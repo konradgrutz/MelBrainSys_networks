@@ -45,7 +45,7 @@ length(wh); nrow(metPairImpacts)
 metPairImpactsNoNA = metPairImpacts[wh,]
 
 # load log expression values
-expr = read.csv(file = "data/MelBrainSys-expression.csv", header = T,sep = "\t",stringsAsFactors = F)
+expr = read.csv(file = "regNet/Data/MelBrainSys-expression.csv", header = T,sep = "\t",stringsAsFactors = F)
 head(expr,3)
 
 impactExprTable = NULL
