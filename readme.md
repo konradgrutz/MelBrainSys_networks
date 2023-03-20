@@ -79,6 +79,8 @@ tar -xvf covTest_1.02.tar.gz
  
 ## Data preparation
 
+- unpack the gz files in regNet/Data/ and data/ and the file annotation/pathway-definitions.xls.gz
+
 - scripts/create-training-test-data.r.ipynb
   - create test and training datasets from TCGA data
   - creates many files in regNet/Data/ - TestSet_ExpressionData_regNet_Run_1.txt, TestSet_MethylationData_regNet_Run_1.txt, TrainSet_ExpressionData_regNet_Run_1.txt, TrainSet_MethylationData_regNet_Run_1.txt ...
