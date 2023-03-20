@@ -19,7 +19,7 @@
 
 ## Prerequisites
 
-### Stting up conda environments
+### Setting up conda environments
 
 ```
 conda create --prefix conda -c conda-forge r-base=4 r-irkernel notebook r-ggplot2 r-scales r-gridextra r-circlize r-venndiagram r-ggrepel r-pheatmap r-reshape2 r-glmnet r-glmpath r-lars r-stringr r-xlsx r-readxl r-devtools r-pvclust
