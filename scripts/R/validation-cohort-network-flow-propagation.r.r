@@ -19,7 +19,6 @@ projectNames = paste0("TrainNetwork-",1:numOfNWs,"/")
 projectNames
 
 # Create basic folder structure
-path = "/data/bcu-projects/gruetzmko/MelBrainSys/regNet/new-sample-pairs/"
 for(projectName in projectNames) {
     createBasicFolderStructure( projectName = projectName, path = myPath,output = F)    
 }
