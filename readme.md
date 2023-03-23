@@ -120,7 +120,7 @@ tar -xvf covTest_1.02.tar.gz
   - predicts expression of MelBrainSys data
   - creates correlation distribution plots of these predicted and original expression: Figure-2-gene-expr-prediction-correl.png
   
-## Neighboring gene gene auto-correlation
+## Neighboring gene auto-correlation
 
 - calculate-gene-gene-expr-correl.r.ipynb
 - calculate auto-correlation of the expression of neighboring genes based on TCGA expression values, Figure S1
