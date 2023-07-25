@@ -26,7 +26,7 @@
   - annotation.tar.gz - gene annotation, pathway definitions, R data with sample and group annotation
   - covTest_1.02.tar.gz - covTest R package needed (see below)
   - regNet-master.zip - regNet R package (see below)
-  - data.tar.gz - MelBrainSys and TCGA expression and methylation data used
+  - data.tar.gz - MelBrainSys and TCGA expression and methylation data including the validation cohort
   
 ### Setting up conda environments
 
