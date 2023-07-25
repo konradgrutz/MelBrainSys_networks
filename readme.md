@@ -19,6 +19,15 @@
 
 ## Prerequisites
 
+### download additional data
+
+- Additional data for the analysis is stored at Zenodo (doi: 10.5281/zenodo.8182913) 
+- this includes
+  - annotation.tar.gz - gene annotation, pathway definitions, R data with sample and group annotation
+  - covTest_1.02.tar.gz - covTest R package needed (see below)
+  - regNet-master.zip - regNet R package (see below)
+  - data.tar.gz - MelBrainSys and TCGA expression and methylation data used
+  
 ### Setting up conda environments
 
 ```
@@ -37,7 +46,7 @@ conda install bioconductor-clusterprofiler
 - start jupyter notebook to view and/or execute the *.r.ipynb scripts:
 
 ```
-jupyter notebook --port=9000 --no-browser
+jupyter notebook
 ```
 - if you run the code on a powerful remote server, use ssh and port forwarding:
   - on the server (where the above conda environment is running):
@@ -46,7 +55,7 @@ jupyter notebook --port=9000 --no-browser
 jupyter notebook --port=9000 --no-browser
 ```
 
-  - on your local machine where you edit the notebooks in a internet browser:
+  - on your local machine where you edit the notebooks in an internet browser:
   
 ```
 ssh -N -L 9000:localhost:9000 userlogin@server.com
@@ -67,7 +76,7 @@ git clone https://github.com/seifemi/regNet.git
 
 #### Get covtest
 - download the latest version https://cran.r-project.org/src/contrib/Archive/covTest/  ->  covTest_1.02.tar.gz
-- or use the file here: bin/covTest_1.02.tar.gz
+- or use the file here: bin/covTest_1.02.tar.gz (after download from Zenodo, see above)
 ```
 cd bin
 tar -xvf covTest_1.02.tar.gz
@@ -79,6 +88,7 @@ tar -xvf covTest_1.02.tar.gz
  
 ## Data preparation
 
+- download additional data from Zenodo (doi: 10.5281/zenodo.8182913), see above
 - unpack the gz files in regNet/Data/ and data/ and the file annotation/pathway-definitions.xls.gz
 
 - scripts/create-training-test-data.r.ipynb
@@ -86,7 +96,7 @@ tar -xvf covTest_1.02.tar.gz
   - creates many files in regNet/Data/ - TestSet_ExpressionData_regNet_Run_1.txt, TestSet_MethylationData_regNet_Run_1.txt, TrainSet_ExpressionData_regNet_Run_1.txt, TrainSet_MethylationData_regNet_Run_1.txt ...
 
 - scripts/prepare-pathways.r.ipynb
-- Create an R object from sheets of the pathway definition table S4 (metabolic pathways, ...) and save for the scripts used later pathway-categories.rds (already done)
+  - create an R object from sheets of the pathway definition table S4 (metabolic pathways, ...) and save for the scripts used later pathway-categories.rds (already done)
 
 
 ## Define metastasis pairs, subgroups, sample annotation colors
@@ -103,7 +113,7 @@ tar -xvf covTest_1.02.tar.gz
   - this will create the basic regNet folder structure for each network
   - and train a network with the corresponding training data (expression and methylation files from above)
   - the results are split up into single parts for each network, which are then combined
-
+- Download NetworkModels.tar from Zenodo (doi: 10.5281/zenodo.8182913) to avoid training again, as this takes lots of RAM, CPU and time. The archive contains for each network (TrainNetwork-1/, .. TrainNetwork-25/) a subfolder NetworkModel/WholeNetwork/ with files inside. These can be used with the following scripts.
 
 ## Trained network evaluation
 
@@ -186,7 +196,7 @@ tar -xvf covTest_1.02.tar.gz
   cd validation-cohort/
   tar xvf trained-NWs.tar.gz 
   ```
-
+- copy the methylation and expression data of the validation cohort (MelBrainSys_ExpressionData_2022_allNeededGenes_regNet.txt.gz, MelBrainSys_MethylationData_2022_allNeededGenes_regNet.txt.gz) from data (from Zenodo) to the directory regNet/validation-cohort/Data
 - scripts/validation-cohort-network-flow-propagation.r.ipynb
   - generates folder structure (remaining subfolders in TrainNetwork-* )
   - computes network flow/impact matrix of each gene on each other gene for each sample
@@ -197,5 +207,15 @@ tar -xvf covTest_1.02.tar.gz
   - rankings of discovery cohort target genes in valid. cohort and impact log-ratios (Suppl. Table 12)
 
 
+## TCGA classification and association
 
+- correlate TCGA sample expression with MelBrainSys samples, assign MelBrainSys subgroups 
+- calculate associations of assigned subgroups with clinical / molecular features, make Kaplan-Meier survival analysis
+- download Suppl. Table S3 of "Genomic Classification of Cutaneous Melanoma", Cell. 2015 Jun 18; 161(7): 1681–1696, doi: 10.1016/j.cell.2015.05.044
+  - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4580370/  -> NIHMS698912-supplement-3.xlsx
+  - save it to annotation folder
+- scripts/TCGA-associations.r.ipynb
+- produces
+  - Figure-6-TCGA-associations.png
+  - SupplFigure-S8-TCGA-survival.png
 
