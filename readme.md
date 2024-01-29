@@ -21,7 +21,7 @@
 
 ### download additional data
 
-- Additional data for the analysis is stored at Zenodo (doi: 10.5281/zenodo.8182913) 
+- Additional data for the analysis is stored at Zenodo (doi: 10.5281/zenodo.10580565) 
 - this includes
   - annotation.tar.gz - gene annotation, pathway definitions, R data with sample and group annotation
   - covTest_1.02.tar.gz - covTest R package needed (see below)
@@ -88,7 +88,7 @@ tar -xvf covTest_1.02.tar.gz
  
 ## Data preparation
 
-- download additional data from Zenodo (doi: 10.5281/zenodo.8182913), see above
+- download additional data from Zenodo (doi: 10.5281/zenodo.10580565), see above
 - unpack the gz files in regNet/Data/ and data/ and the file annotation/pathway-definitions.xls.gz
 
 - scripts/create-training-test-data.r.ipynb
@@ -113,7 +113,7 @@ tar -xvf covTest_1.02.tar.gz
   - this will create the basic regNet folder structure for each network
   - and train a network with the corresponding training data (expression and methylation files from above)
   - the results are split up into single parts for each network, which are then combined
-- Download NetworkModels.tar from Zenodo (doi: 10.5281/zenodo.8182913) to avoid training again, as this takes lots of RAM, CPU and time. The archive contains for each network (TrainNetwork-1/, .. TrainNetwork-25/) a subfolder NetworkModel/WholeNetwork/ with files inside. These can be used with the following scripts.
+- Download NetworkModels.tar from Zenodo (doi: 10.5281/zenodo.10580565) to avoid training again, as this takes lots of RAM, CPU and time. The archive contains for each network (TrainNetwork-1/, .. TrainNetwork-25/) a subfolder NetworkModel/WholeNetwork/ with files inside. These can be used with the following scripts.
 
 ## Trained network evaluation
 
