@@ -19,7 +19,6 @@ head(cancerSignPWs,3)
 # cancer sign: DNA replication added, ECM missing, Melanoma missing, replication missing
 # immune: ECM receptor interaction added
 
-
 pwCategories = list(signalingPWs = NULL, metabolicPWs = NULL, immunePWs = NULL)
 
 for (pw in colnames(metabolicPWs[,-c(1:7)])) {

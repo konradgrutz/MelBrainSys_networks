@@ -75,20 +75,6 @@ head(impactExprTable,3)
 
 samplePairPerSubgroup
 
-corMat = matrix(0,nrow = ncol(medianImpRatiosMx), ncol = 6, 
-                dimnames = c(list(colnames(medianImpRatiosMx)), 
-                             list(c("spearman_rho","spearman_p","spearman_FDR","pearson_cor","pearson_p","pearson_FDR"))) )
-for(sp in colnames(voomExprRatios)) {
-    corSp = cor.test(x = medianImpRatiosMx[allGenes,sp], y = voomExprRatios[allGenes,sp],method = "spearman")
-    corPe = cor.test(x = medianImpRatiosMx[allGenes,sp], y = voomExprRatios[allGenes,sp],method = "pearson")
-    corMat[sp,]=c(corSp$estimate, corSp$p.value, 0, corPe$estimate,corPe$p.value, 0)
-}
-
-
-
-corMat[,"spearman_FDR"] = p.adjust(p = corMat[,"spearman_p"], method = "BH")
-corMat[,"pearson_FDR"] = p.adjust(p = corMat[,"pearson_p"])
-
 cors = NULL
 for(sp in names(sampleMapping)) {
     tmp = cor.test(x = impactExprTable[ impactExprTable$sample_pair==sp,"impact_ratio"], 
@@ -148,7 +134,7 @@ p3 = ggplot(data=impactExprTable[impactExprTable$sample_pair %in% samplePairPerS
             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 p3
 
-png(filename = paste0(outDirectory,"SupplFigure-S5-impact-expression-correl.png"), 
+png(filename = paste0(outDirectory,"SupplFigure-S7-impact-expression-correl.png"), 
     width = 3000, height = 3000, res=220)
 grid.arrange(grobs=list(p1,p3,p2), nrow=3, # widths=c(1,1,1.1), 
             left = textGrob(expression(expression~log[2]~ratio), rot = 90, vjust = 1),
@@ -174,7 +160,8 @@ whY = correls$correlation[o][whSign]-0.025
 p = ggplot(data = correls,mapping = aes(x=reorder(sample_pair,subgroupNum),
                                         y=correlation, fill=subgroupID)) + 
     geom_bar(stat="identity") + 
-    xlab("") + theme(axis.text.x=element_text(angle = 45, hjust = 0)) + 
+    xlab("") + ylab("Correlation between impact and expression") + 
+    theme(axis.text.x=element_text(angle = 45, hjust = 0)) + 
     scale_x_discrete(position = "top")  + 
     scale_fill_manual(values=c(annotColors$subgroup["SG1"], annotColors$subgroup["SG2"], 
                                annotColors$subgroup["SG3"]), 

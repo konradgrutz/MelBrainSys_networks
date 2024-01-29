@@ -127,7 +127,7 @@ hmGenesPat = pheatmap(mat = genesPatients,annotation_col=colAnnot, legend = F,co
                       show_rownames = F, angle_col = 45,
                    annotation_colors = annotColors)
 
-svg(filename = "FiguresTables/SupplFigure-2-genes-vs-samplePairs-part1.svg")
+svg(filename = "FiguresTables/SupplFigure-S4-genes-vs-samplePairs-part1.svg")
 hmGenesPat
 dev.off()
 
@@ -138,7 +138,7 @@ hmGenesPatSub = pheatmap(mat = genesPatients[wh,],annotation_col=colAnnot, legen
                          color = c("white","deepskyblue3"),show_rownames = T, angle_col = 45,
                    annotation_colors = annotColors)
 
-svg(filename = "FiguresTables/SupplFigure-2-genes-vs-samplePairs-part2.svg")
+svg(filename = "FiguresTables/SupplFigure-S4-genes-vs-samplePairs-part2.svg")
 hmGenesPatSub
 dev.off()
 
@@ -149,7 +149,7 @@ barplotGenesShared = ggplot(data, aes(x=num_met_pairs)) + geom_histogram(binwidt
     xlab("number of metastases pairs") + ylab("number of genes")  + 
     annotate("text", x=1:5,y=rs, label=rs, vjust=-1)
 barplotGenesShared
-svg(filename = "FiguresTables/SupplFigure-2-genes-vs-samplePairs-part3.svg")
+svg(filename = "FiguresTables/SupplFigure-S4-genes-vs-samplePairs-part3.svg")
 barplotGenesShared
 dev.off()
 
@@ -158,6 +158,6 @@ histoGenesShared = ggplot(data[ data$num_met_pairs>=3,], aes(x = reorder(gene,-n
     xlab("gene") + ylab("number of metastases pairs") + theme(axis.text.x=element_text(angle = 45, hjust = 1))
 histoGenesShared
 
-svg(filename = "FiguresTables/SupplFigure-2-genes-vs-samplePairs-part4.svg")
+svg(filename = "FiguresTables/SupplFigure-S4-genes-vs-samplePairs-part4.svg")
 histoGenesShared
 dev.off()

@@ -2,10 +2,10 @@
 # Data overview
 
 - directories
-  - *annotation*: gene annotations, chromosome lengths, sample and metastasis pair annotation
+  - *annotation*: gene annotations, sample and metastasis pair annotation, pathway definitions
   - *bin*: covTest R package and regNet R package (installation see below)
   - *conda*: the required conda environment will be installed there (installation see below)
-  - *data*: expression and methylation values of the cohort
+  - *data*: expression and methylation values of the cohorts
   - *FiguresTables*: figures and tables of the paper will be stored there (see the analysis scripts below)
   - *regNet*: where the internal analysis data of the scripts are stored, including the validation cohort
   - *scripts*: all jupyter notebooks of the analysis explained below (*.r.ipynb)
@@ -26,12 +26,12 @@
   - annotation.tar.gz - gene annotation, pathway definitions, R data with sample and group annotation
   - covTest_1.02.tar.gz - covTest R package needed (see below)
   - regNet-master.zip - regNet R package (see below)
-  - data.tar.gz - MelBrainSys and TCGA expression and methylation data including the validation cohort
+  - data.tar.gz - TCGA and MelBrainSys expression and methylation data including the validation cohort
   
 ### Setting up conda environments
 
 ```
-conda create --prefix conda -c conda-forge r-base=4 r-irkernel notebook r-ggplot2 r-scales r-gridextra r-circlize r-venndiagram r-ggrepel r-pheatmap r-reshape2 r-glmnet r-glmpath r-lars r-stringr r-xlsx r-readxl r-devtools r-pvclust
+conda create --prefix conda -c conda-forge r-base=4 r-irkernel notebook r-ggplot2 r-scales r-gridextra r-circlize r-venndiagram r-ggrepel r-pheatmap r-reshape2 r-glmnet r-glmpath r-lars r-stringr r-xlsx r-readxl r-devtools r-pvclust 
 ```
 
 - activate and add 2 bioconductor packages:
@@ -120,7 +120,7 @@ tar -xvf covTest_1.02.tar.gz
 - networks-connectivity.r
 - creates 
   - connectivity table for paper - Suppl-Table-5-connectivity-stats.xls
-  - Dot plot of connections - SupplFigure-3-source-target-interactions.png
+  - Dot plot of connections - SupplFigure-5-source-target-interactions.png
   - known melanoma driver gene ranking in networks - Suppl-Table-6-key-driver-ranks.xls
 
 ## Evaluate prediction of networks
@@ -133,7 +133,7 @@ tar -xvf covTest_1.02.tar.gz
 ## Neighboring gene auto-correlation
 
 - calculate-gene-gene-expr-correl.r.ipynb
-- calculate auto-correlation of the expression of neighboring genes based on TCGA expression values, Figure S1
+- calculate auto-correlation of the expression of neighboring genes based on TCGA expression values, Figure S3
 
 ## Network propagation
 - scripts/network-propagation.r.ipynb
@@ -144,7 +144,7 @@ tar -xvf covTest_1.02.tar.gz
   - defines and prepares altered genes, i.e. differential promoter methylation + expression trend
   - saved in altered-genes-per-patient.rds
   - overlap of these genes between metastasis pairs
-  - produces subfigures for Suppl. Figure S2 
+  - produces subfigures for Suppl. Figure S4
   
 ## Calculate log impacts
 - scripts/calculate-log-impacts.r.ipynb
@@ -157,19 +157,19 @@ tar -xvf covTest_1.02.tar.gz
 - saved for later: metPairs-impactRatios-onPathways.rds, metPairs-impactRatios-onAllTargetGenes.rds
 
 
-## plot log impact distribution and perform cluster analysis
+## Plot log impact distribution and perform cluster analysis
 
 - scripts/impact-logratios-cluster-analysis-TableS7-S9.r.ipynb
-- violin plots of impact log2-ratios, Suppl. Figure S4
+- violin plots of impact log2-ratios, Suppl. Figure S6
 - cluster heatmaps of log-ratio impacts on pathways, Figure 3
 - Suppl. Table S7: log-impact and log-expression by pathway
 - Suppl. Table S9: expression impact quadrants shared pathways
 
 ## Impact expression correlation
 
-- scripts/impact-expression-correl-Fig4-SuppFigS5.r.ipynb
+- scripts/impact-expression-correl-Fig4-SuppFigS7.r.ipynb
 - calculates correlations between average log expression ratio and average log impact ratio of the altered genes on all pathways of each metastases pair
-- creates SupplFigure 5 with scatter plots
+- creates Suppl. Figure 7 with scatter plots
 - and Figure 4 with barplots of the correlations 
 
 ## Overrepresentation analysis
@@ -179,12 +179,17 @@ tar -xvf covTest_1.02.tar.gz
 - saved in Suppl. Table S8
 
 ## Target candidate genes
-- scripts/target-candidates-circosPlots-Fig5-SupplFigS6-SupplTableS10.r.ipynb
+- scripts/target-candidates-circosPlots-Fig5-SupplFigS8-SupplTableS10.r.ipynb
 - produces
   - Figure 5: circos plots of source and target genes
   - SupplTable S10 target genes mean impact and expr. ratios per group
-  - SupplFigure S6 target gene candidates scatterplot impact vs. expression ratios
+  - SupplFigure S8 target gene candidates scatterplot impact vs. expression ratios
 
+## Text mining analysis with DisGeNET
+- scripts/text-mining-MelBrainSys.r.ipynb
+- produces
+  - SupplTable S12 with results from retrieval of DisGeNET text mining-based information
+  
 ## Validation
 
 - must copy all TCGA trained networks from discovery to validation cohort subdirectories
@@ -196,26 +201,14 @@ tar -xvf covTest_1.02.tar.gz
   cd validation-cohort/
   tar xvf trained-NWs.tar.gz 
   ```
-- copy the methylation and expression data of the validation cohort (MelBrainSys_ExpressionData_2022_allNeededGenes_regNet.txt.gz, MelBrainSys_MethylationData_2022_allNeededGenes_regNet.txt.gz) from data (from Zenodo) to the directory regNet/validation-cohort/Data
+- copy the methylation and expression data of the validation cohort (MelBrainSys-validation-expression.csv, MelBrainSys-validation-methylation.csv) from data (from Zenodo) to the directory regNet/validation-cohort/Data
 - scripts/validation-cohort-network-flow-propagation.r.ipynb
   - generates folder structure (remaining subfolders in TrainNetwork-* )
   - computes network flow/impact matrix of each gene on each other gene for each sample
-- scripts/validation-SupplTableS12-SupplFigureS7.r.ipynb
+- scripts/validation-SupplTableS14-SupplFigureS9.r.ipynb
   - computes impact log-ratios of all source genes on all genes
-  - clusters impact ratios of discovery and validation cohort together (Suppl. Figure S7)
+  - clusters impact ratios of discovery and validation cohort together (Suppl. Figure S9)
   - determines validation cohort target gene candidates (Suppl. Table S10)
-  - rankings of discovery cohort target genes in valid. cohort and impact log-ratios (Suppl. Table 12)
+  - rankings of discovery cohort target genes in valid. cohort and impact log-ratios (Suppl. Table 14)
 
-
-## TCGA classification and association
-
-- correlate TCGA sample expression with MelBrainSys samples, assign MelBrainSys subgroups 
-- calculate associations of assigned subgroups with clinical / molecular features, make Kaplan-Meier survival analysis
-- download Suppl. Table S3 of "Genomic Classification of Cutaneous Melanoma", Cell. 2015 Jun 18; 161(7): 1681–1696, doi: 10.1016/j.cell.2015.05.044
-  - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4580370/  -> NIHMS698912-supplement-3.xlsx
-  - save it to annotation folder
-- scripts/TCGA-associations.r.ipynb
-- produces
-  - Figure-6-TCGA-associations.png
-  - SupplFigure-S8-TCGA-survival.png
-
+  

@@ -32,8 +32,8 @@ usedSamples = unname(unlist(samplePairs))
 usedSamples
 
 myFullDataSet = loadGeneExpressionAndCopyNumberDataSet(
-    geneExpressionFile = "MelBrainSys_ExpressionData_2022_allNeededGenes_regNet.txt", 
-    geneCopyNumberFile = "MelBrainSys_MethylationData_2022_allNeededGenes_regNet.txt", path = "Data/" )
+    geneExpressionFile = "MelBrainSys-validation-expression.csv", 
+    geneCopyNumberFile = "MelBrainSys-validation-methylation.csv", path = "Data/" )
 
 nwFlow1sample = function(sample, logFile) {
     starttotal = Sys.time()

@@ -1,8 +1,7 @@
 # creates 
 #  - connectivity table for paper - SupplTable-S5-connectivity-stats.xls
-#  - DotPlot of connections - SupplFigure-S3-source-target-interactions.png
+#  - DotPlot of connections - SupplFigure-S5-source-target-interactions.png
 #  - known melanoma driver gene ranking in networks - SupplTable-S6-key-driver-ranks.xls
- 
 
 library(ggplot2)
 library(gridExtra)
@@ -151,10 +150,6 @@ aliases
 wh = which(toupper(aliases) %in% toupper(names(outgoingLinksMean)))
 wh
 
-
-
-
-
 outDF = NULL
 for(g in names(genesAndAliasesForPaper)) {
     aliases = c(g,genesAndAliasesForPaper[[g]])
@@ -299,7 +294,7 @@ plotInteractions = function() {
 plotInteractions()
 
 png(width = 2400, height = 2400, res = 300, 
-    filename = paste0(outDirectory,"/SupplFigure-S3-source-target-interactions.png"))
+    filename = paste0(outDirectory,"/SupplFigure-S6-source-target-interactions.png"))
 plotInteractions()
 dev.off()
 

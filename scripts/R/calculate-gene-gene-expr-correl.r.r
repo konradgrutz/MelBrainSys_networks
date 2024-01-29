@@ -89,7 +89,7 @@ p = ggplot(data = allAcfQuantilesChrCondensed, mapping=aes(x=lag)) +
     scale_fill_manual(values = fillCols, name = "correlation quantiles") #+ 
 p
 
-png(filename = paste0(outDirectory, "SupplFigure-S1-expr-auto-correlation.png"),
+png(filename = paste0(outDirectory, "SupplFigure-S3-expr-auto-correlation.png"),
     width = 2000,height=1200, res = 340)
 p
 dev.off()

@@ -1,9 +1,7 @@
 # produces
 # Figure 5: circos plots of source and target genes
 # SupplTable S10 target genes mean impact and expr. ratios per group
-# SupplFigure S6 target gene candidates scatterplot ompact vs. expression
-
-
+# SupplFigure S8 target gene candidates scatterplot ompact vs. expression
 
 library(reshape2)
 library(ggplot2)
@@ -464,7 +462,7 @@ p = ggplot(data = exprImpForPlot, mapping = aes(x = mean_log_impact, y = mean_lo
    # annotate(geom = "text",x = -1.5, y = 2, label=paste0("p = ",round(testRes$p.value,3),", R = ",round(testRes$estimate,2)))
 p
 
-png(filename = paste0(outDirectory,"SupplFigure-S6-target-gene-candidates-scatterplot.png"),
+png(filename = paste0(outDirectory,"SupplFigure-S8-target-gene-candidates-scatterplot.png"),
     width = 1600,height = 1200, res=300)
 p
 dev.off()

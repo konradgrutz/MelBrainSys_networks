@@ -43,8 +43,8 @@ length(formerRegGenes)
 sapply(regGenesPerPat,length)
 
 myFullDataSet = loadGeneExpressionAndCopyNumberDataSet(
-    geneExpressionFile = "MelBrainSys_ExpressionData_2022_allNeededGenes_regNet.txt", 
-    geneCopyNumberFile = "MelBrainSys_MethylationData_2022_allNeededGenes_regNet.txt", 
+    geneExpressionFile = "MelBrainSys-validation-expression.csv", 
+    geneCopyNumberFile = "MelBrainSys-validation-methylation.csv", 
     path = "Data/" )
 allGenesNWs = myFullDataSet$genes
 numGenes = length(allGenesNWs)
@@ -203,7 +203,7 @@ ph = pheatmap(mat = impRatiosDiscValid,clustering_distance_rows = drows,
     color = colorRampPalette(c("blue","white","red"))(100),
     breaks = c(seq(rg[1],0,length.out = 51),seq(0,rg[2],length.out = 50)[-1]))
 
-png(file = paste0(outDirectory, "SupplFigure-S7-MeanLogImp-clustering-discovery-validation-cohort.png"),
+png(file = paste0(outDirectory, "SupplFigure-S9-MeanLogImp-clustering-discovery-validation-cohort.png"),
     res = 250,width = 2400,height = 2000)
 ph
 dev.off()
@@ -287,7 +287,7 @@ outSG3 = data.frame(gene = SG3candidates, meanLogIR,percentiles,
                     m[ SG3candidates ,])
 outSG3
 
-write.xlsx(x = outSG2,file = paste0(outDirectory,"Suppl-Table-S12-target-gene-ranking.xls"),
+write.xlsx(x = outSG2,file = paste0(outDirectory,"Suppl-Table-S14-target-gene-ranking.xls"),
            sheetName = "SG2", row.names = F)
-write.xlsx(x = outSG3,file = paste0(outDirectory,"Suppl-Table-S12-target-gene-ranking.xls"),
+write.xlsx(x = outSG3,file = paste0(outDirectory,"Suppl-Table-S14-target-gene-ranking.xls"),
            sheetName = "SG3", row.names = F, append = T)

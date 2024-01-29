@@ -23,7 +23,9 @@ networkName = "TcgaMelanomaExprMeth"
 localGeneCutoff = 30
 pValCutoff = 0.001
 nbCPUs = 10 
-numOfNWs = 2
+numOfNWs = 2 # for test purposes only 2 networks. Hence note, the results can deviate from the paper.
+numRandNWinstances = 2
+dataSetsPath = "Data/"
 
 # random network instance is saved
 # under NetworkModel/WholeNetwork/ using a pre-defined file-naming convention with random
@@ -40,11 +42,11 @@ create1randomNW = function(parameterSet) {
 }
 
 # make parameter sets for creation of random nw:
-numNWinstances = numOfNWs
+randNWinstancesRange = 1:numRandNWinstances
 nwRange = 1:numOfNWs
 parameterSets = NULL
 i=0
-for(nwInstanceNb in 1:numNWinstances ) {
+for(nwInstanceNb in randNWinstancesRange ) {
     for(nwSubdir in paste0("TrainNetwork-",nwRange)) {
         i = i + 1
         parameterSets[[i]] = list(networkName=networkName,pValCutoff=pValCutoff,
@@ -138,9 +140,7 @@ networkNameBase = "RandomNetwork_"
 parameterSetsRandom = 
     createRandomPredictionSets(networkName = networkName, randomNameBase = "RandomNetwork_",
                          dataSetName = "TestSet", pValCutoffs =  0.001,
-                         localGeneCutoffs = 30, numNWinstanceRange = 1:numOfNWs, nwRange = 1:numOfNWs)
-
-parameterSetsRandom
+                         localGeneCutoffs = 30, numNWinstanceRange = 1:numRandNWinstances, nwRange = 1:numOfNWs)
 
 # parameter sets for prediction of MelBrain Data with TCGA trained:
 parameterSetsMelBrainSys = 
@@ -158,7 +158,6 @@ for(i in 1:length(parameterSetsMelBrainSys)) {
 }
 
 # predict test data with trained network:
-dataSetsPath = "Data/"
 startt = Sys.time()
 tmp = mclapply(X = parameterSetsNormal, predict1nw, mc.cores = nbCPUs)
 endt = Sys.time()
@@ -178,6 +177,91 @@ tmp = mclapply(X = parameterSetsMelBrainSys, predict1nw, mc.cores = nbCPUs)
 endt = Sys.time()
 endt - startt
 # 24 sec with 19 cpus for 2 data sets (2 NWs each 1 NW instances)
+
+# parameter sets for prediction of MelBrain BRAIN Data with TCGA trained:
+parameterSetsMelBrainSysBrain = 
+    createNormalPredictionSets(networkName = networkName,
+                         dataSetName = "MelBrainSysBrain", pValCutoffs = 0.001, 
+                         localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+# rename data sets:
+for(i in 1:length(parameterSetsMelBrainSysBrain)) {
+    parameterSetsMelBrainSysBrain[[i]]$dataSetExpr = "MelBrainSysBrainSamples-expression.csv"
+    parameterSetsMelBrainSysBrain[[i]]$dataSetMethyl = "MelBrainSysBrainSamples-methylation.csv"
+}
+
+# parameter sets for prediction of MelBrain EXTRACRANIAL Data with TCGA trained:
+parameterSetsMelBrainSysECM = 
+    createNormalPredictionSets(networkName = networkName,
+                         dataSetName = "MelBrainSysECM", pValCutoffs = 0.001, 
+                         localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+# rename data sets:
+for(i in 1:length(parameterSetsMelBrainSysECM)) {
+    parameterSetsMelBrainSysECM[[i]]$dataSetExpr = "MelBrainSysNonBrainSamples-expression.csv"
+    parameterSetsMelBrainSysECM[[i]]$dataSetMethyl = "MelBrainSysNonBrainSamples-methylation.csv"
+}
+
+# predict MelBrainSys Brain sample data with trained networks:
+startt = Sys.time()
+tmp = mclapply(X = parameterSetsMelBrainSysBrain, predict1nw, mc.cores = nbCPUs)
+endt = Sys.time()
+endt - startt
+
+# predict MelBrainSys extracranial sample data with trained networks:
+startt = Sys.time()
+tmp = mclapply(X = parameterSetsMelBrainSysECM, predict1nw, mc.cores = nbCPUs)
+endt = Sys.time()
+endt - startt
+
+# parameter sets for prediction of MelBrain Validation:
+parameterSetsMelBrainSysValidation = 
+    createNormalPredictionSets(networkName = networkName, 
+                         dataSetName = "MelBrainSysValidation", pValCutoffs = 0.001, 
+                         localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+# rename validation data sets:
+for(i in 1:length(parameterSetsMelBrainSysValidation)) {
+    parameterSetsMelBrainSysValidation[[i]]$dataSetExpr = "MelBrainSys-validation-expression.csv"
+    parameterSetsMelBrainSysValidation[[i]]$dataSetMethyl = "MelBrainSys-validation-methylation.csv"
+}
+
+# predict MelBrainSys validation sample data:
+startt = Sys.time()
+tmp = mclapply(X = parameterSetsMelBrainSysValidation, predict1nw, mc.cores = nbCPUs)
+endt = Sys.time()
+endt - startt
+
+# parameter sets for prediction of MelBrain Validation BRAIN Data with TCGA trained:
+parameterSetsMelBrainSysValidationBrain = 
+    createNormalPredictionSets(networkName = networkName, 
+                         dataSetName = "MelBrainSysValidationBrain", pValCutoffs = 0.001, 
+                         localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+# rename validation data sets:
+for(i in 1:length(parameterSetsMelBrainSysValidationBrain)) {
+    parameterSetsMelBrainSysValidationBrain[[i]]$dataSetExpr = "MelBrainSysBrain-validation-expression.csv"
+    parameterSetsMelBrainSysValidationBrain[[i]]$dataSetMethyl = "MelBrainSysBrain-validation-methylation.csv"
+}
+
+# predict MelBrainSys BRAIN validation sample data with trained networks:
+startt = Sys.time()
+tmp = mclapply(X = parameterSetsMelBrainSysValidationBrain, predict1nw, mc.cores = nbCPUs)
+endt = Sys.time()
+endt - startt
+
+# parameter sets for prediction of MelBrain Validation EXTRACRANIAL Data with TCGA trained:
+parameterSetsMelBrainSysValidationECM = 
+    createNormalPredictionSets(networkName = networkName, 
+                         dataSetName = "MelBrainSysValidationECM", pValCutoffs = 0.001, 
+                         localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+# rename validation data sets:
+for(i in 1:length(parameterSetsMelBrainSysValidationECM)) {
+    parameterSetsMelBrainSysValidationECM[[i]]$dataSetExpr = "MelBrainSysECM-validation-expression.csv"
+    parameterSetsMelBrainSysValidationECM[[i]]$dataSetMethyl = "MelBrainSysECM-validation-methylation.csv"
+}
+
+# predict MelBrainSys EXTRACRANIAL validation sample data with trained networks:
+startt = Sys.time()
+tmp = mclapply(X = parameterSetsMelBrainSysValidationECM, predict1nw, mc.cores = nbCPUs)
+endt = Sys.time()
+endt - startt
 
 readInNormalNWPredictions = function(dataSetName,networkName, pValCutoffs,
                              localGeneCutoffs,nwRange) {
@@ -273,11 +357,36 @@ melBrainPredResults =
 randomPredTestResults = 
     readInRandomNWPredictions(dataSetName = "TestSet",networkNameBase = "RandomNetwork_",
                       networkName = networkName, pValCutoffs = "0.001",
-                      localGeneCutoffs = 30, nwRange=1:numOfNWs , NWinstances = 1:numOfNWs)
+                      localGeneCutoffs = 30, nwRange=1:numOfNWs , NWinstances = 1:numRandNWinstances)
+
+melBrainMBMPredResults = 
+    readInNormalNWPredictions(dataSetName = "MelBrainSysBrain",networkName = networkName, 
+                              pValCutoffs = "0.001", localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+
+melBrainECMPredResults = 
+    readInNormalNWPredictions(dataSetName = "MelBrainSysECM",networkName = networkName, 
+                              pValCutoffs = "0.001", localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+
+melBrainValidationPredResults = 
+    readInNormalNWPredictions(dataSetName = "MelBrainSysValidation",networkName = networkName, 
+                              pValCutoffs = "0.001", localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+
+melBrainValidationMBMPredResults = 
+    readInNormalNWPredictions(dataSetName = "MelBrainSysValidationBrain",networkName = networkName, 
+                              pValCutoffs = "0.001", localGeneCutoffs = 30, nwRange = 1:numOfNWs)
+
+melBrainValidationECMPredResults = 
+    readInNormalNWPredictions(dataSetName = "MelBrainSysValidationECM",networkName = networkName, 
+                              pValCutoffs = "0.001", localGeneCutoffs = 30, nwRange = 1:numOfNWs)
 
 head(melBrainPredResults,3)
 head(normalPredTestResults,3)
 head(randomPredTestResults,3)
+head(melBrainMBMPredResults,3)
+head(melBrainECMPredResults,3)
+head(melBrainValidationPredResults,3)
+head(melBrainValidationMBMPredResults,3)
+head(melBrainValidationECMPredResults,3)
 
 # now get median for each gene in each random network (nwInstanceNb) of networkNum networks
 allGenes = unique(sort(randomPredTestResults$Gene))
@@ -308,7 +417,7 @@ colnames(mergedPredResultsOwnNW) = c("type","localGeneCutoff","pValCutoff","netw
 tail(mergedPredResultsOwnNW,3)
 mergedPredResultsOwnNW = 
     rbind(mergedPredResultsOwnNW,
-          data.frame(stringsAsFactors = F, type="MelBrainSys cohort",
+          data.frame(stringsAsFactors = F, type="Discovery cohort",
                      melBrainPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
 tail(mergedPredResultsOwnNW,3)
 
@@ -318,10 +427,46 @@ mergedPredResultsOwnNW =
                      normalPredTestResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
 tail(mergedPredResultsOwnNW,3)
 
+mergedPredResultsOwnNW = 
+    rbind(mergedPredResultsOwnNW,
+      data.frame(stringsAsFactors = F, type="Validation cohort",
+         melBrainValidationPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
+tail(mergedPredResultsOwnNW,3)
+
+mergedPredResultsOwnNW = 
+    rbind(mergedPredResultsOwnNW,
+      data.frame(stringsAsFactors = F, type="Discovery cohort extracranial",
+         melBrainECMPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
+tail(mergedPredResultsOwnNW,3)
+
+mergedPredResultsOwnNW = 
+    rbind(mergedPredResultsOwnNW,
+      data.frame(stringsAsFactors = F, type="Discovery cohort brain",
+         melBrainMBMPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
+tail(mergedPredResultsOwnNW,3)
+
+mergedPredResultsOwnNW = 
+    rbind(mergedPredResultsOwnNW,
+      data.frame(stringsAsFactors = F, type="Validation cohort brain",
+         melBrainValidationMBMPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
+tail(mergedPredResultsOwnNW,3)
+
+mergedPredResultsOwnNW = 
+    rbind(mergedPredResultsOwnNW,
+      data.frame(stringsAsFactors = F, type="Validation cohort extracranial",
+         melBrainValidationECMPredResults[,c("localGeneCutoff","pValCutoff","networkNum","Gene","Correlation", "P.Value")]))
+tail(mergedPredResultsOwnNW,3)
+
 # only results without NA values
 mergedPredResultsOwnNWNoNA = mergedPredResultsOwnNW[which(!is.na(mergedPredResultsOwnNW$Correlation)),]
 nrow(mergedPredResultsOwnNWNoNA); nrow(mergedPredResultsOwnNW)
 table(mergedPredResultsOwnNWNoNA$type)
+
+# median correlation and p-value for each:
+sapply(unique(mergedPredResultsOwnNWNoNA$type), function(type) 
+    c(cor = median(mergedPredResultsOwnNWNoNA[ mergedPredResultsOwnNWNoNA$type == type,"Correlation"]),
+    pval = median(mergedPredResultsOwnNWNoNA[ mergedPredResultsOwnNWNoNA$type == type,"P.Value"]))
+       )
 
 # now calculate mean correlations over all trained networks:
 mergedPredResultsOwnNWNoNAmean = NULL
@@ -338,26 +483,54 @@ for(type in unique(mergedPredResultsOwnNWNoNA$type)) {
                              pValCutoff=pValCutoff,Gene=names(meanCor),Correlation=meanCor))
 }
 
-head(mergedPredResultsOwnNWNoNAmean)
-
 correlRange = c(-1,1)
 
-# now plot mean correlation between predicted and real gene expression
+table(mergedPredResultsOwnNWNoNAmean$type)
 
-p1 = ggplot(data = mergedPredResultsOwnNWNoNAmean,
+### random NW + TCGA test + MelBrain discovery + validation
+
+wh = which(mergedPredResultsOwnNWNoNAmean$type %in% 
+           c("Random networks","TCGA test data","Discovery cohort",
+                                "Validation cohort"))
+p1 = ggplot(data = mergedPredResultsOwnNWNoNAmean[wh,],
            mapping = aes(x=Correlation, fill=type)) + 
     geom_histogram(position="identity",alpha=0.4, bins = 100) + 
-    scale_fill_manual(breaks =c("Random networks","TCGA test data","MelBrainSys cohort"),
-                      values = c("#666666","aquamarine4","blue")) +
-    scale_y_sqrt(breaks=c(10,100,250,500,1000,2000), name="Number of genes")+
+    scale_fill_manual(breaks =c("Random networks","TCGA test data","Discovery cohort",
+                                "Validation cohort"),
+                      values = c("#666666","aquamarine4","blue",
+                                "darkorchid1")) +
+    scale_y_sqrt(breaks=c(10,100,250,500,1000,2000), name="Number of genes", limits=c(0,3000))+
     scale_x_continuous( name="Correlation: predicted vs. original expression", limits=c(-1,1)) + 
     #theme(axis.text.x=element_text(angle=90,vjust=0.5,hjust=1)) + # axis labels perpendicular
-    theme(legend.title=element_blank(), 
+    theme(legend.title=element_blank(), legend.position=c(.8,.8),legend.text=element_text(size=7),
           legend.spacing.x = unit(0.25, 'cm')) # more space between legend label and colored box
 p1
 
-# for paper:
+# now plot mean correlation between predicted and real gene expression
+
+# discovery brain + ecm + validation brain + ecm
+
+wh = which(mergedPredResultsOwnNWNoNAmean$type %in% 
+           c("Discovery cohort brain", "Discovery cohort extracranial",
+                               "Validation cohort brain", "Validation cohort extracranial"))
+
+p2 = ggplot(data = mergedPredResultsOwnNWNoNAmean[wh,],
+           mapping = aes(x=Correlation, fill=type)) + 
+    geom_histogram(position="identity",alpha=0.4, bins = 100) + 
+    scale_fill_manual(breaks = c("Discovery cohort brain", "Discovery cohort extracranial",
+                                "Validation cohort brain", "Validation cohort extracranial"),
+                      values = c("brown2", "cornflowerblue","gold2" , "aquamarine4")) +
+    scale_y_sqrt(breaks=c(10,100,250,500,1000,2000), name="Number of genes", limits=c(0,3000))+
+    scale_x_continuous( name="Correlation: predicted vs. original expression", limits=c(-1,1)) + 
+    #labs(tag = "A") + theme(plot.tag.position = c(-0.5, 2000))  + 
+    #theme(axis.text.x=element_text(angle=90,vjust=0.5,hjust=1)) + # axis labels perpendicular
+    theme(legend.title=element_blank(), legend.position=c(.75,.8),legend.text=element_text(size=7),
+          legend.spacing.x = unit(0.25, 'cm')) # more space between legend label and colored box
+p2
+
+allplots = grid.arrange(p1,p2,nrow=1)
+
 png(filename = paste0(outDirectory,"Figure-2-gene-expr-prediction-correl.png"),
-    width = 2000,height = 1000, res=300)
-p1
+    width = 4000,height = 1600, res=370)
+plot(allplots)
 dev.off()

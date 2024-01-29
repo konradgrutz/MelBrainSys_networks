@@ -130,7 +130,7 @@ p1 = ggplot(data = metPairImpactsNoNA, mapping = aes(x=samplePair, y=log2_median
 
 p1
 
-png(filename = paste0(outDirectory,"SupplFigure-S4-log-impact-ratio-violins.png"),
+png(filename = paste0(outDirectory,"SupplFigure-S6-log-impact-ratio-violins.png"),
     width = 2000,height = 2000, res= 400)
 p1
 dev.off()

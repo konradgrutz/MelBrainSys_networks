@@ -1,5 +1,3 @@
-# from redmine (end of ticket): https://imbredmine.medizin.tu-dresden.de/redmine/issues/187
-
 # for each of the 1-n networks: 
 #  this will create the basic regNet folder structure
 #  and train a network with the corresponding training data (expression and methylation files)
